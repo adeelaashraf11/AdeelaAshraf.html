@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random User Profiles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .card {
+            background-color: #fff;
+            width: 250px;
+            margin: 15px;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card img {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
+        .card h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        .card p {
+            color: #555;
+            margin: 5px 0;
+        }
+        .card .gender,
+        .card .country {
+            font-style: italic;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align:center; padding: 20px;">Random User Profiles</h1>
+
+    <div class="container" id="user-cards"></div>  <!-- Profile cards will go here -->
+
+    <script>
+        // Fetch random user data from the API
+        fetch('https://randomuser.me/api/?results=5')
+            .then(response => response.json())  // Convert the response to JSON
+            .then(data => {
+                const userCardsContainer = document.getElementById('user-cards');
+                const users = data.results;
+
+                // Loop through the users and create profile cards
+                users.forEach(user => {
+                    // Create the card div
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    
+                    // Create and append the profile picture
+                    const img = document.createElement('img');
+                    img.src = user.picture.large;
+                    img.alt = `${user.name.first} ${user.name.last}`;
+                    card.appendChild(img);
+
+                    // Create and append the name
+                    const name = document.createElement('h3');
+                    name.textContent = `${user.name.first} ${user.name.last}`;
+                    card.appendChild(name);
+
+                    // Create and append the email
+                    const email = document.createElement('p');
+                    email.textContent = `Email: ${user.email}`;
+                    card.appendChild(email);
+
+                    // Create and append the gender
+                    const gender = document.createElement('p');
+                    gender.textContent = `Gender: ${user.gender.charAt(0).toUpperCase() + user.gender.slice(1)}`;
+                    gender.classList.add('gender');
+                    card.appendChild(gender);
+
+                    // Create and append the country
+                    const country = document.createElement('p');
+                    country.textContent = `Country: ${user.location.country}`;
+                    country.classList.add('country');
+                    card.appendChild(country);
+
+                    // Append the card to the container
+                    userCardsContainer.appendChild(card);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    </script>
+
+</body>
+</html>

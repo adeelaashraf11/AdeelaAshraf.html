@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using Ajax</title>
+</head>
+<body>
+
+    <button type="button" onclick="loadData1()">Load Data</button>
+    <table id="dataTable" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>UserID</th>
+                <th>Title</th>
+                <th>Completed</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be inserted here -->
+        </tbody>
+    </table>
+
+    <script>
+        const loadData1 = () => {
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (this.readyState === 4 && this.status === 200) { // Fixed logical AND
+                    const todos = JSON.parse(this.responseText);
+
+                    // Clear previous data in the table
+                    const tableBody = document.querySelector("#dataTable tbody");
+                    tableBody.innerHTML = '';
+
+                    // Loop through the data and create rows for each todo
+                    todos.forEach(todo => {
+                        const tr = document.createElement('tr');
+                        
+                        // Create and append ID column
+                        const tdId = document.createElement('td');
+                        tdId.textContent = todo.id;
+                        tr.appendChild(tdId);
+
+                        // Create and append UserID column
+                        const tdUserId = document.createElement('td');
+                        tdUserId.textContent = todo.userId;
+                        tr.appendChild(tdUserId);
+
+                        // Create and append Title column
+                        const tdTitle = document.createElement('td');
+                        tdTitle.textContent = todo.title;
+                        tr.appendChild(tdTitle);
+
+                        // Create and append Completed column
+                        const tdCompleted = document.createElement('td');
+                        tdCompleted.textContent = todo.completed ? 'Yes' : 'No';
+                        tr.appendChild(tdCompleted);
+
+                        // Append the row to the table body
+                        tableBody.appendChild(tr);
+                    });
+                }
+            };
+            xhr.open('GET', 'https://jsonplaceholder.typicode.com/todos');
+            xhr.send();
+        };
+    </script>
+
+</body>
+</html>
+
